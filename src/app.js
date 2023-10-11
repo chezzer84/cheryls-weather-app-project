@@ -69,6 +69,9 @@ function handleSubmit(event) {
   event.preventDefault();
   let cityInputElement = document.querySelector("#city-input");
   search(cityInputElement.value);
+  if ((cityInputElement.value = "boya")) {
+    alert("Hows the weather looking at my house?");
+  }
 }
 
 function displayFahrentheitTemperature(event) {
