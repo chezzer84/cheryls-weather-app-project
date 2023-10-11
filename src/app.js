@@ -21,15 +21,19 @@ function formatDate(timestamp) {
   return `${day} ${hours}:${minutes}`;
 }
 function getForecast(coordinates) {
-  console.log(coordinates);
-
   let apiKey = "5t5a295fb1483fe5b29973001ac3oefd";
   let unit = "metric";
-  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&key=${apiKey}&units=&{unit}`;
-  console.log(apiUrl);
+  let apiUrl = `https://api.shecodes.io/weather/v1/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&key=${apiKey}&units=${unit}`;
   axios.get(apiUrl).then(displayForecast);
 }
 
+function formatDaily(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[day];
+}
 function displayTemperature(response) {
   let temperatureElement = document.querySelector("#temperature");
   let cityElement = document.querySelector("#cityName");
@@ -85,25 +89,31 @@ function displayCelsiusTemperature(event) {
 }
 
 function displayForecast(response) {
-  console.log(response.data.daily);
+  let forecast = response.data.daily;
+  console.log(forecast);
+
   let forecastElement = document.querySelector("#forecast");
+
   let forecastHTML = `<div class="row">`;
-  let days = ["Thurs", "Fri", "Sat", "Sun"];
-  days.forEach(function (day) {
-    forecastHTML =
-      forecastHTML +
-      `
+
+  forecast.forEach(function (forecastDaily, index) {
+    if (index < 6)
+      forecastHTML =
+        forecastHTML +
+        `
   <div class="col-2">
-    <div class="weather-forecast-day">${day}</div>
-    <img src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/broken-clouds-day.png" 
+    <div class="weather-forecast-day">${formatDaily(forecastDaily.time)}</div>
+    <img src="http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${
+      forecastDaily.condition.icon
+    }.png"
     alt="" 
     width="42"
     />
     <div class="weather-forecast-temperatures">
       <span class ="weather-forecast-temperature-max">
-        18°</span>
+        ${Math.round(forecastDaily.temperature.maximum)}°</span>
        <span class ="weather-forecast-temperature-min">
-        12°</span>
+         ${Math.round(forecastDaily.temperature.minimum)}°</span>
     </div>
   </div>
 
