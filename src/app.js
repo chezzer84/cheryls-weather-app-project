@@ -123,15 +123,7 @@ function displayForecast(response) {
   forecastElement.innerHTML = forecastHTML;
 }
 
-let celsiusTemperature = null;
-
 let form = document.querySelector("#search-form");
 form.addEventListener("submit", handleSubmit);
-
-let fahrentheitLink = document.querySelector("#farenheit-link");
-fahrentheitLink.addEventListener("click", displayFahrentheitTemperature);
-
-let celsiusLink = document.querySelector("#celsius-link");
-celsiusLink.addEventListener("click", displayCelsiusTemperature);
 
 search("Perth");
